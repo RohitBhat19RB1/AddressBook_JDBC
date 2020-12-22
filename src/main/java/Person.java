@@ -13,6 +13,8 @@ public class Person {
     public int MobileNumber;
     public String EmailId;
     public LocalDate startDate;
+    public int id;
+    public String person_type;
 
     public Person(int personID, String firstName, String lastName, String address, String city, String state, int zip, int mobileNumber, String emailId, LocalDate startDate) {
         this.PersonId = personID;
@@ -28,15 +30,35 @@ public class Person {
 
     }
 
+    public Person(int id, String person_type) {
+        this.id = id;
+        this.person_type = person_type;
+    }
+
+    public Person(int personID, String firstName, String lastName, String address, String city, String state, int zip, int mobileNumber, String emailId, LocalDate startDate, String person_type) {
+        this.PersonId = personID;
+        this.FirstName = firstName;
+        this.LastName = lastName;
+        this.Address = address;
+        this.City = city;
+        this.State = state;
+        this.Zip = zip;
+        this.MobileNumber = mobileNumber;
+        this.EmailId = emailId;
+        this.startDate = startDate;
+        this.person_type = person_type;
+
+    }
+
     @Override
     public int hashCode() {
-        return Objects.hash(FirstName, LastName, Address, City, State, Zip, MobileNumber, EmailId, startDate);
+        return Objects.hash(FirstName, LastName, Address, City, State, Zip, MobileNumber, EmailId, startDate, person_type);
     }
 
     @Override
     public String toString() { return "PersonId=" + PersonId + ", FirstName=" +
             FirstName + ", LastName=" + LastName + ", Address=" + Address + ", City=" + City
-            + ", State=" + State + ", Zip=" + Zip + ", MobileNumber=" + MobileNumber + ", EmailId=" + EmailId + ", startDate=" + startDate;}
+            + ", State=" + State + ", Zip=" + Zip + ", MobileNumber=" + MobileNumber + ", EmailId=" + EmailId + ", startDate=" + startDate + ", person_type=" + person_type;}
 
     @Override
     public boolean equals(java.lang.Object o) {

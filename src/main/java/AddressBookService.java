@@ -31,8 +31,8 @@ public class AddressBookService {
 
     }
 
-    public void addEmployeeToAddressBook(String firstName, String lastName, String address, String city, String state, int zip, int mobile, String email, LocalDate date) {
-        addressBookList.add(addressBookDBService.addEntryToPayroll(firstName, lastName, address, city, state, zip, mobile, email, date));
+    public void addEmployeeToAddressBook(String firstName, String lastName, String address, String city, String state, int zip, int mobile, String email, LocalDate date, String person_type) {
+        addressBookList.add(addressBookDBService.addEntryToPayroll(firstName, lastName, address, city, state, zip, mobile, email, date, person_type));
 
     }
 
@@ -41,7 +41,7 @@ public class AddressBookService {
             System.out.println("Employee being added: "+addressBookData.FirstName);
             this.addEmployeeToAddressBook(addressBookData.FirstName, addressBookData.LastName, addressBookData.Address,
                     addressBookData.City, addressBookData.State, addressBookData.Zip, addressBookData.MobileNumber,
-                    addressBookData.EmailId, addressBookData.startDate);
+                    addressBookData.EmailId, addressBookData.startDate, addressBookData.person_type);
             System.out.println("Employee added: "+addressBookData.FirstName);
         });
         System.out.println(this.addressBookList);
@@ -82,6 +82,29 @@ public class AddressBookService {
         if(ioService.equals(IOService.DB_IO))
             this.addressBookList = addressBookDBService.readData();
         return this.addressBookList;
+    }
+
+        public void addEmployeesToAddressBookWithThreads(List<Person> personList) {
+        Map<Integer, Boolean> employeeAdditionStatus = new HashMap<Integer, Boolean>();
+        personList.forEach(addressBookData -> {
+            Runnable task = () -> {
+                employeeAdditionStatus.put(addressBookData.hashCode(), false);
+                System.out.println("Employee Being Added: "+Thread.currentThread().getName());
+                this.addEmployeeToAddressBook(addressBookData.FirstName, addressBookData.LastName, addressBookData.Address, addressBookData.City,
+                        addressBookData.State, addressBookData.Zip, addressBookData.MobileNumber, addressBookData.EmailId, addressBookData.startDate, addressBookData.person_type);
+                employeeAdditionStatus.put(addressBookData.hashCode(), true);
+               System.out.println("Employee Added: "+Thread.currentThread().getName());
+
+            };
+            Thread thread = new Thread(task, addressBookData.FirstName);
+            thread.start();
+
+        });
+        while (employeeAdditionStatus.containsValue(false)) {
+            try { Thread.sleep(10);
+            } catch (InterruptedException e) { }
+        }
+        System.out.println(personList);
     }
 
 }
